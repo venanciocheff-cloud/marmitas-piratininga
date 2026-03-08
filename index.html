@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Marmitas Piratininga</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body{
+font-family: Arial;
+background:#f4f4f4;
+text-align:center;
+margin:0;
+}
+
+header{
+background:#2c7a2c;
+color:white;
+padding:20px;
+font-size:22px;
+}
+
+button{
+padding:15px;
+margin:10px;
+font-size:18px;
+border:none;
+border-radius:8px;
+background:#2c7a2c;
+color:white;
+width:200px;
+}
+
+input{
+padding:10px;
+margin:10px;
+font-size:16px;
+}
+
+.card{
+background:white;
+padding:15px;
+margin:10px;
+border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>Marmitas Piratininga</header>
+
+<h2>Pedido de Marmita</h2>
+
+<input id="nome" placeholder="Seu nome"><br>
+<input id="setor" placeholder="Alojamento / setor"><br>
+
+<button onclick="pedir('Frango')">Frango</button>
+<button onclick="pedir('Carne')">Carne</button>
+<button onclick="pedir('Peixe')">Peixe</button>
+
+<br><br>
+
+<button onclick="cozinha()">Abrir painel da cozinha</button>
+
+<script>
+
+function pedir(tipo){
+
+let nome=document.getElementById("nome").value
+let setor=document.getElementById("setor").value
+
+if(nome=="" || setor==""){
+alert("Preencha nome e setor")
+return
+}
+
+let pedidos=JSON.parse(localStorage.getItem("pedidos"))||[]
+
+let pedido={
+nome:nome,
+setor:setor,
+marmita:tipo,
+hora:new Date().toLocaleTimeString()
+}
+
+pedidos.push(pedido)
+
+localStorage.setItem("pedidos",JSON.stringify(pedidos))
+
+alert("Pedido enviado!")
+
+}
+
+function cozinha(){
+
+let pedidos=JSON.parse(localStorage.getItem("pedidos"))||[]
+
+let tela="<h1>Painel da Cozinha</h1>"
+
+pedidos.forEach((p,i)=>{
+
+tela+=`
+<div class="card">
+Nome: ${p.nome}<br>
+Setor: ${p.setor}<br>
+Marmita: ${p.marmita}<br>
+Hora: ${p.hora}<br><br>
+
+<button onclick="window.print()">Imprimir</button>
+
+</div>
+`
+
+})
+
+let w=window.open()
+w.document.write(tela)
+
+}
+
+</script>
+
+</body>
+</html>
